@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Kaze OS Splash
+Description=Sleek animated boot splash for Kaze OS
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/kaze
+ScriptFile=/usr/share/plymouth/themes/kaze/kaze.script

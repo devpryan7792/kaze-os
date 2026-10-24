@@ -1,0 +1,21 @@
+# Maintainer: devpryan7792 <devpryan7792@kaze-os.org>
+pkgname=kaze-welcome
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="First-boot interactive setup and configuration assistant for Kaze OS (風)"
+arch=('any')
+url="https://github.com/devpryan7792/arch-distro"
+license=('GPL3')
+depends=('python' 'pciutils')
+optdepends=(
+    'reflector: Fastest mirror synchronization'
+    'snapper: Btrfs snapshot status indicator'
+)
+source=('kaze-welcome' 'kaze-welcome.desktop')
+sha256sums=('SKIP' 'SKIP')
+
+package() {
+    install -Dm755 "${srcdir}/kaze-welcome" "${pkgdir}/usr/bin/kaze-welcome"
+    install -Dm644 "${srcdir}/kaze-welcome.desktop" "${pkgdir}/usr/share/applications/kaze-welcome.desktop"
+    install -Dm644 "${srcdir}/kaze-welcome.desktop" "${pkgdir}/etc/xdg/autostart/kaze-welcome.desktop"
+}

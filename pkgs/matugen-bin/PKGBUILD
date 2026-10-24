@@ -1,0 +1,16 @@
+# Maintainer: devpryan7792 <devpryan7792@kaze-os.org>
+pkgname=matugen-bin
+pkgver=2.4.0
+pkgrel=1
+pkgdesc="Material You dynamic color palette generator from images (Binary Release)"
+arch=('x86_64')
+url="https://github.com/InioX/matugen"
+license=('GPL-2.0-only')
+provides=('matugen')
+conflicts=('matugen')
+source_x86_64=("https://github.com/InioX/matugen/releases/download/v${pkgver}/matugen-linux-x86_64.tar.gz")
+sha256sums_x86_64=('SKIP')
+
+package() {
+    install -Dm755 "${srcdir}/matugen" "${pkgdir}/usr/bin/matugen"
+}

@@ -1,0 +1,98 @@
+name: Compile & Release Kaze OS ISO Images
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: 'Flavor to compile'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - kasumi
+          - hayate
+          - nagomi
+      release_version:
+        description: 'Release version tag'
+        required: true
+        default: '1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  determine-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      flavors: ${{ steps.set-matrix.outputs.flavors }}
+    steps:
+      - id: set-matrix
+        run: |
+          FLAVOR_INPUT="${{ github.event.inputs.flavor || 'all' }}"
+          if [ "$FLAVOR_INPUT" = "all" ]; then
+            echo 'flavors=["kasumi", "hayate", "nagomi"]' >> $GITHUB_OUTPUT
+          else
+            echo "flavors=[\"$FLAVOR_INPUT\"]" >> $GITHUB_OUTPUT
+          fi
+
+  build-iso:
+    needs: determine-matrix
+    name: Build Kaze ${{ matrix.flavor }} ISO
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flavor: ${{ fromJson(needs.determine-matrix.outputs.flavors) }}
+
+    steps:
+      - name: Checkout Monorepo
+        uses: actions/checkout@v4
+
+      - name: Reclaim Runner Disk Space
+        uses: easimon/maximize-build-space@v10
+        with:
+          root-reserve-mb: 8192
+          temp-reserve-mb: 4096
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'false'
+
+      - name: Compile ISO via Archiso Docker Container
+        run: |
+          VERSION="${{ github.event.inputs.release_version || github.ref_name || '1.0.0' }}"
+          VERSION="${VERSION#v}" # Strip leading v
+
+          docker run --privileged --rm \
+            -v /dev:/dev \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            archlinux:base-devel \
+            bash -c "pacman -Syu --noconfirm archiso git rsync dosfstools mtools libisoburn squashfs-tools && \
+                     ./build.sh --flavor ${{ matrix.flavor }} --version ${VERSION} --clean"
+
+      - name: Upload ISO Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaze-${{ matrix.flavor }}-iso
+          path: |
+            out/*.iso
+            out/*.sha256
+          retention-days: 7
+
+      - name: Publish to GitHub Releases
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            out/*.iso
+            out/*.sha256
+          name: Kaze OS ${{ github.event.inputs.release_version || github.ref_name }} (風)
+          draft: false
+          prerelease: false
+          generate_release_notes: true

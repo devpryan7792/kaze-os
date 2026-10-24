@@ -1,0 +1,8 @@
+[NightColor]
+Active=true
+DayTemperature=6500
+Mode=Location
+NightTemperature=4200
+
+[Wayland]
+InputMethod=/usr/share/applications/org.fcitx.Fcitx5.desktop

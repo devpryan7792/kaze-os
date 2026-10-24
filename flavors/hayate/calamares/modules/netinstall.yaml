@@ -1,0 +1,34 @@
+# ==============================================================================
+# KAZE HAYATE: CALAMARES NETINSTALL DESKTOP SELECTOR (The CachyOS Model)
+# (flavors/hayate/calamares/modules/netinstall.yaml)
+# ==============================================================================
+
+- name: "Desktop Interface"
+  description: "Select your preferred desktop environment and interface"
+  critical: true
+  expanded: true
+  items:
+    - name: "KDE Plasma 6 (Tuned Gaming Profile)"
+      description: "Low-latency Wayland session with FreeSync/G-Sync and HDR support (Default)"
+      selected: true
+      packages:
+        - plasma-meta
+        - plasma-wayland-session
+        - sddm
+    - name: "Hyprland (Performance Rice)"
+      description: "Lightweight, minimal RAM Wayland tiling compositor"
+      selected: false
+      packages:
+        - hyprland
+        - quickshell
+        - ghostty
+    - name: "GNOME 46 (Wayland)"
+      description: "Streamlined modern desktop"
+      selected: false
+      packages:
+        - gnome
+        - gdm
+    - name: "Headless / CLI"
+      description: "Minimal Arch installation without graphical display manager"
+      selected: false
+      packages: []

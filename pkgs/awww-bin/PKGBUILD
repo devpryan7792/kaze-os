@@ -1,0 +1,20 @@
+# Maintainer: devpryan7792 <devpryan7792@kaze-os.org>
+pkgname=awww-bin
+pkgver=0.1.1
+pkgrel=1
+pkgdesc="A efficient Wayland wallpaper daemon with smooth animations (Binary Release)"
+arch=('x86_64')
+url="https://github.com/LGFae/awww"
+license=('GPL-3.0-only')
+depends=('wayland' 'libxkbcommon')
+provides=('awww')
+conflicts=('awww')
+source_x86_64=("https://github.com/LGFae/awww/releases/download/v${pkgver}/awww-x86_64-unknown-linux-musl.tar.gz")
+sha256sums_x86_64=('SKIP')
+
+package() {
+    install -Dm755 "${srcdir}/awww" "${pkgdir}/usr/bin/awww"
+    if [ -f "${srcdir}/awww-daemon" ]; then
+        install -Dm755 "${srcdir}/awww-daemon" "${pkgdir}/usr/bin/awww-daemon"
+    fi
+}

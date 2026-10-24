@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" width="3840" height="2160">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f0f17" />
+      <stop offset="40%" stop-color="#1a1b26" />
+      <stop offset="70%" stop-color="#24283b" />
+      <stop offset="100%" stop-color="#414868" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff007f" />
+      <stop offset="100%" stop-color="#ff757f" />
+    </linearGradient>
+    <linearGradient id="mtnGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1f2335" />
+      <stop offset="100%" stop-color="#13131d" />
+    </linearGradient>
+    <linearGradient id="snowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c0caf5" />
+      <stop offset="100%" stop-color="#7aa2f7" />
+    </linearGradient>
+  </defs>
+  <!-- Sky -->
+  <rect width="3840" height="2160" fill="url(#skyGrad)" />
+  <!-- Cyber Sun -->
+  <circle cx="1920" cy="1150" r="480" fill="url(#sunGrad)" opacity="0.9" />
+  <!-- Distant Mountains -->
+  <polygon points="400,2160 1200,1350 2000,2160" fill="#1b1d2b" opacity="0.7" />
+  <polygon points="1840,2160 2640,1400 3440,2160" fill="#1b1d2b" opacity="0.7" />
+  <!-- Mount Fuji -->
+  <polygon points="720,2160 1920,850 3120,2160" fill="url(#mtnGrad)" />
+  <!-- Snow Cap -->
+  <polygon points="1720,1080 1920,850 2120,1080 2020,1130 1920,1090 1820,1140" fill="url(#snowGrad)" />
+  <!-- Neon Horizon & Grid Lines -->
+  <line x1="0" y1="2150" x2="3840" y2="2150" stroke="#7aa2f7" stroke-width="4" opacity="0.6" />
+</svg>

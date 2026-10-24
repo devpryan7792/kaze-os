@@ -1,0 +1,38 @@
+# ==============================================================================
+# KAZE NAGOMI (和) - DAILY DRIVER WORKSTATION FLAVOR PACKAGE MANIFEST
+# ==============================================================================
+
+# Desktop Environment (KDE Plasma 6 Wayland)
+plasma-meta
+plasma-wayland-session
+kde-applications-meta
+sddm
+sddm-kcm
+kinfocenter
+dolphin
+konsole
+kate
+spectacle
+ark
+
+# Software Stores & Flatpak Delivery
+discover
+packagekit-qt6
+flatpak
+
+# Power Management, Codecs & Hardware
+power-profiles-daemon
+intel-media-driver
+libva-mesa-driver
+libfreeaptx
+bluez
+bluez-utils
+cups
+system-config-printer
+avahi
+nss-mdns
+
+# Welcome Wizard & Custom Tooling (From [kaze-local] repo)
+kaze-welcome
+kaze-branding
+kaze-cli

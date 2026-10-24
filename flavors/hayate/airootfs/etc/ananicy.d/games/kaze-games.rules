@@ -1,0 +1,17 @@
+# ==============================================================================
+# KAZE HAYATE: ANANICY-CPP GAME PRIORITIZATION RULES
+# (/etc/ananicy.d/games/kaze-games.rules)
+# ==============================================================================
+
+{"name": "steam", "type": "Game_Launcher"}
+{"name": "steamwebhelper", "nice": 5, "ioclass": "idle"}
+{"name": "cs2", "type": "Game"}
+{"name": "dota2", "type": "Game"}
+{"name": "wine-preloader", "type": "Game"}
+{"name": "wine64-preloader", "type": "Game"}
+{"name": "wineserver", "nice": -10, "sched": "iso"}
+{"name": "gamescope", "type": "Game"}
+{"name": "mangohud", "type": "Game"}
+{"name": "gamemoded", "nice": -8}
+{"name": "pipewire", "nice": -11, "sched": "rr"}
+{"name": "wireplumber", "nice": -10, "sched": "rr"}

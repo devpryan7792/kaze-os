@@ -1,0 +1,43 @@
+# ==============================================================================
+# KAZE HAYATE (疾風) - PERFORMANCE & GAMING FLAVOR PACKAGE MANIFEST
+# ==============================================================================
+
+# Kernel Stack (CachyOS + Fallback Zen)
+linux-cachyos
+linux-cachyos-headers
+linux-zen
+linux-zen-headers
+
+# Performance Daemons & Resource Governors
+ananicy-cpp
+cachyos-ananicy-rules
+zram-generator
+gamemode
+lib32-gamemode
+cpupower
+schedtool
+
+# Gaming & Compatibility Stack
+wine-staging
+winetricks
+vulkan-tools
+mesa-demos
+mangohud
+lib32-mangohud
+goverlay
+
+# GPU Drivers & Vulkan Stack
+vulkan-radeon
+lib32-vulkan-radeon
+vulkan-intel
+lib32-vulkan-intel
+nvidia-prime
+
+# Desktop Environment & Display Manager (Tuned Plasma 6 Live Session)
+plasma-meta
+plasma-wayland-session
+sddm
+
+# Distro Identity & Custom CLI (From [kaze-local] repo)
+kaze-cli
+kaze-branding

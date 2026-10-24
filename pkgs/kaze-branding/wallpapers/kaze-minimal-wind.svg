@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" width="3840" height="2160">
+  <defs>
+    <linearGradient id="minBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#121216" />
+      <stop offset="100%" stop-color="#18181f" />
+    </linearGradient>
+    <linearGradient id="windGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#565f89" />
+      <stop offset="100%" stop-color="#7aa2f7" />
+    </linearGradient>
+  </defs>
+  <rect width="3840" height="2160" fill="url(#minBg)" />
+  <path d="M 600 800 C 1200 400, 2400 1200, 3200 700" fill="none" stroke="url(#windGlow)" stroke-width="6" opacity="0.3" stroke-linecap="round" />
+  <path d="M 400 1100 C 1400 700, 2200 1500, 3400 1000" fill="none" stroke="url(#windGlow)" stroke-width="10" opacity="0.4" stroke-linecap="round" />
+  <path d="M 800 1400 C 1600 1100, 2600 1700, 3000 1300" fill="none" stroke="url(#windGlow)" stroke-width="4" opacity="0.25" stroke-linecap="round" />
+</svg>

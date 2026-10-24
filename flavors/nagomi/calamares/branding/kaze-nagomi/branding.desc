@@ -1,0 +1,38 @@
+# ==============================================================================
+# KAZE NAGOMI: CALAMARES BRANDING (flavors/nagomi/calamares/branding/kaze-nagomi/branding.desc)
+# ==============================================================================
+
+---
+componentName: kaze-nagomi
+
+windowExpanding: noexpand
+windowSize: 960px,640px
+windowPlacement: center
+
+strings:
+    productName:         "Kaze Nagomi"
+    shortProductName:    "Nagomi"
+    version:             "1.0.0"
+    shortVersion:        "1.0"
+    versionedName:       "Kaze Nagomi 1.0.0 (和)"
+    shortVersionedName:  "Nagomi 1.0"
+    bootloaderEntryName: "Kaze Nagomi"
+    productUrl:          "https://github.com/devpryan7792/arch-distro"
+    supportUrl:          "https://github.com/devpryan7792/arch-distro/issues"
+    knownIssuesUrl:      "https://github.com/devpryan7792/arch-distro/issues"
+    releaseNotesUrl:     "https://github.com/devpryan7792/arch-distro/releases"
+
+images:
+    productLogo:         "kaze-logo.png"
+    productIcon:         "kaze-logo.png"
+    productWelcome:      "welcome.png"
+
+style:
+    SidebarBackground:    "#121b1b"
+    SidebarText:          "#e0fffa"
+    SidebarTextSelect:    "#ffffff"
+    SidebarTextHighlight: "#48d1cc"
+
+slideshow:               "show.qml"
+
+slideshowAPI: 2

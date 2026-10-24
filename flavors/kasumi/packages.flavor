@@ -1,0 +1,42 @@
+# ==============================================================================
+# KAZE KASUMI (霞) - AESTHETIC WAYLAND RICE FLAVOR PACKAGE MANIFEST
+# ==============================================================================
+
+# Compositor & Wayland Essentials
+hyprland
+hyprlock
+hypridle
+xdg-desktop-portal-hyprland
+polkit-kde-agent
+qt5-wayland
+qt6-wayland
+wl-clipboard
+grim
+slurp
+swappy
+
+# Shell, Status Bar & App Launcher (Tier 1 Guaranteed Official Stack)
+kitty
+waybar
+fuzzel
+hyprpaper
+swaybg
+
+# Distro Identity & Custom CLI (From [kaze-local] repo)
+kaze-cli
+kaze-branding
+
+# Fonts & Icons
+ttf-jetbrains-mono-nerd
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+papirus-icon-theme
+
+# Media, Hardware Control & Utilities
+yazi
+ffmpegthumbnailer
+pavucontrol
+blueman
+brightnessctl
+playerctl

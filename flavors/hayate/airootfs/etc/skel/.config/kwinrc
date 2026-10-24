@@ -1,0 +1,12 @@
+[Compositing]
+AllowTearing=true
+GLCore=true
+LatencyPolicy=ExtremelyLow
+MaxFPS=360
+RefreshRate=0
+WindowsBlockCompositing=true
+
+[Plugins]
+blurEnabled=false
+contrastEnabled=false
+slidingpopupsEnabled=false

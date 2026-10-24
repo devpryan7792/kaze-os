@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" width="3840" height="2160">
+  <defs>
+    <linearGradient id="mistBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0b12" />
+      <stop offset="50%" stop-color="#161622" />
+      <stop offset="100%" stop-color="#1e1e2e" />
+    </linearGradient>
+    <linearGradient id="neonGlow1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#bb9af7" />
+      <stop offset="100%" stop-color="#7aa2f7" />
+    </linearGradient>
+    <linearGradient id="neonGlow2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff757f" />
+      <stop offset="100%" stop-color="#c3e88d" />
+    </linearGradient>
+  </defs>
+  <rect width="3840" height="2160" fill="url(#mistBg)" />
+  <!-- Fluid Aesthetic Mist Waves -->
+  <path d="M 0 1400 Q 960 900, 1920 1300 T 3840 1100 L 3840 2160 L 0 2160 Z" fill="url(#neonGlow1)" opacity="0.12" />
+  <path d="M 0 1600 Q 1200 1200, 2400 1700 T 3840 1450 L 3840 2160 L 0 2160 Z" fill="url(#neonGlow2)" opacity="0.10" />
+  <path d="M 0 1850 Q 800 1600, 1920 1800 T 3840 1700 L 3840 2160 L 0 2160 Z" fill="#13131d" opacity="0.8" />
+  <!-- Subtle Center Accent -->
+  <circle cx="1920" cy="850" r="180" fill="none" stroke="url(#neonGlow1)" stroke-width="4" opacity="0.4" />
+</svg>

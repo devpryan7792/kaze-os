@@ -1,0 +1,22 @@
+# Maintainer: devpryan7792 <devpryan7792@kaze-os.org>
+pkgname=kaze-cli
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Kaze OS command-line management and dynamic theming utility (風)"
+arch=('any')
+url="https://github.com/devpryan7792/arch-distro"
+license=('GPL3')
+depends=('python')
+optdepends=(
+    'matugen: Dynamic Material You palette extraction'
+    'awww: Hardware-accelerated 144Hz Wayland wallpaper daemon'
+    'quickshell: Unified QtQuick desktop shell'
+    'hyprland: Dynamic tiling Wayland compositor'
+    'snapper: Automated Btrfs snapshot inspection'
+)
+source=('kaze-cli')
+sha256sums=('SKIP')
+
+package() {
+    install -Dm755 "${srcdir}/kaze-cli" "${pkgdir}/usr/bin/kaze-cli"
+}

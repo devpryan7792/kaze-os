@@ -1,0 +1,38 @@
+# ==============================================================================
+# KAZE HAYATE: CALAMARES BRANDING (flavors/hayate/calamares/branding/kaze-hayate/branding.desc)
+# ==============================================================================
+
+---
+componentName: kaze-hayate
+
+windowExpanding: noexpand
+windowSize: 960px,640px
+windowPlacement: center
+
+strings:
+    productName:         "Kaze Hayate"
+    shortProductName:    "Hayate"
+    version:             "1.0.0"
+    shortVersion:        "1.0"
+    versionedName:       "Kaze Hayate 1.0.0 (疾風)"
+    shortVersionedName:  "Hayate 1.0"
+    bootloaderEntryName: "Kaze Hayate"
+    productUrl:          "https://github.com/devpryan7792/arch-distro"
+    supportUrl:          "https://github.com/devpryan7792/arch-distro/issues"
+    knownIssuesUrl:      "https://github.com/devpryan7792/arch-distro/issues"
+    releaseNotesUrl:     "https://github.com/devpryan7792/arch-distro/releases"
+
+images:
+    productLogo:         "kaze-logo.png"
+    productIcon:         "kaze-logo.png"
+    productWelcome:      "welcome.png"
+
+style:
+    SidebarBackground:    "#181214"
+    SidebarText:          "#ffe0e0"
+    SidebarTextSelect:    "#ffffff"
+    SidebarTextHighlight: "#ff5555"
+
+slideshow:               "show.qml"
+
+slideshowAPI: 2

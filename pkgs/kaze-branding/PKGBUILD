@@ -1,0 +1,25 @@
+# Maintainer: devpryan7792 <devpryan7792@kaze-os.org>
+pkgname=kaze-branding
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Wallpapers, Plymouth boot splash, and brand icons for Kaze OS (風)"
+arch=('any')
+url="https://github.com/devpryan7792/arch-distro"
+license=('GPL3')
+optdepends=('plymouth: Graphical boot animation')
+
+package() {
+    # 1. Distro Logos & Icons
+    install -Dm644 "${startdir}/kaze-logo.svg" "${pkgdir}/usr/share/pixmaps/kaze-logo.svg"
+    install -Dm644 "${startdir}/kaze-logo.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/kaze-os.svg"
+
+    # 2. Wallpapers
+    install -dm755 "${pkgdir}/usr/share/backgrounds/kaze"
+    install -m644 "${startdir}/wallpapers/"*.svg "${pkgdir}/usr/share/backgrounds/kaze/"
+
+    # 3. Plymouth Boot Splash Theme
+    install -dm755 "${pkgdir}/usr/share/plymouth/themes/kaze"
+    install -m644 "${startdir}/plymouth/kaze.plymouth" "${pkgdir}/usr/share/plymouth/themes/kaze/"
+    install -m644 "${startdir}/plymouth/kaze.script" "${pkgdir}/usr/share/plymouth/themes/kaze/"
+    install -m644 "${startdir}/kaze-logo.svg" "${pkgdir}/usr/share/plymouth/themes/kaze/logo.svg"
+}

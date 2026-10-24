@@ -1,0 +1,279 @@
+#!/usr/bin/env python3
+"""
+Kaze OS Command-Line Management Utility (kaze-cli)
+Unified tool for wallpaper switching, dynamic Material You theming,
+dotfile synchronization, and system diagnostics.
+"""
+
+import sys
+import os
+import argparse
+import subprocess
+import shutil
+import random
+import glob
+from datetime import datetime
+from pathlib import Path
+
+# ANSI Styling
+BOLD = "\033[1m"
+GREEN = "\033[0;32m"
+BLUE = "\033[0;34m"
+CYAN = "\033[0;36m"
+YELLOW = "\033[1;33m"
+RED = "\033[0;31m"
+RESET = "\033[0m"
+
+CACHE_DIR = Path.home() / ".cache"
+WALLPAPER_CACHE = CACHE_DIR / "kaze-wallpaper"
+WALLPAPER_DIR = Path("/usr/share/backgrounds/kaze")
+CONFIG_DIR = Path.home() / ".config"
+
+def log_info(msg):
+    print(f"{BLUE}{BOLD}[KAZE-INFO]{RESET} {msg}")
+
+def log_success(msg):
+    print(f"{GREEN}{BOLD}[KAZE-SUCCESS]{RESET} {msg}")
+
+def log_warn(msg):
+    print(f"{YELLOW}{BOLD}[KAZE-WARN]{RESET} {msg}")
+
+def log_error(msg):
+    print(f"{RED}{BOLD}[KAZE-ERROR]{RESET} {msg}", file=sys.stderr)
+
+def run_cmd(cmd, check=False, capture=False):
+    """Run shell command safely."""
+    try:
+        if capture:
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=check)
+            return res.stdout.strip()
+        else:
+            return subprocess.run(cmd, check=check).returncode == 0
+    except Exception as e:
+        return None
+
+# ------------------------------------------------------------------------------
+# Wallpaper & Dynamic Theming
+# ------------------------------------------------------------------------------
+def apply_matugen_and_reloads(wallpaper_path, scheme="scheme-tonal-spot"):
+    """Trigger Matugen palette generation and live reload signals."""
+    matugen_cfg = CONFIG_DIR / "matugen" / "config.toml"
+    
+    # 1. Run Matugen if available and config exists
+    if shutil.which("matugen") and matugen_cfg.is_file():
+        log_info(f"Generating dynamic Material You palette ({scheme})...")
+        cmd = ["matugen", "image", str(wallpaper_path), "--type", scheme, "-c", str(matugen_cfg)]
+        run_cmd(cmd)
+        log_success("Material You tokens updated across Hyprland, QuickShell, and Ghostty.")
+    else:
+        log_warn("matugen or ~/.config/matugen/config.toml not detected. Skipping color extraction.")
+
+    # 2. Reload QuickShell
+    if shutil.which("quickshell"):
+        run_cmd(["quickshell", "ipc", "call", "theme", "reload"])
+
+    # 3. Reload Hyprland
+    if os.environ.get("HYPRLAND_INSTANCE_SIGNATURE"):
+        run_cmd(["hyprctl", "reload"])
+
+def set_wallpaper(image_path, scheme="scheme-tonal-spot"):
+    """Set desktop wallpaper using awww and trigger dynamic palette reload."""
+    path = Path(image_path).expanduser().resolve()
+    if not path.is_file():
+        log_error(f"Image file not found: {image_path}")
+        sys.exit(1)
+
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    with open(WALLPAPER_CACHE, "w") as f:
+        f.write(str(path))
+
+    log_info(f"Selected wallpaper: {path.name}")
+
+    # Set wallpaper via awww daemon if present
+    if shutil.which("awww"):
+        # Ensure daemon is running
+        check_daemon = run_cmd(["pidof", "awww-daemon"], capture=True)
+        if not check_daemon:
+            subprocess.Popen(["awww-daemon"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
+        # Smooth wipe transition at 144Hz
+        run_cmd([
+            "awww", "img", str(path),
+            "--transition-type", "wipe",
+            "--transition-step", "90",
+            "--transition-fps", "144"
+        ])
+        log_success("Wallpaper transitioned via awww (144Hz wipe).")
+    elif shutil.which("swww"):
+        run_cmd(["swww", "img", str(path)])
+    else:
+        log_warn("No Wayland wallpaper daemon (awww/swww) found on PATH.")
+
+    # Trigger Matugen and UI reload pipeline
+    apply_matugen_and_reloads(path, scheme)
+
+def cmd_wallpaper(args):
+    """Handle 'kaze-cli wallpaper' command."""
+    target = args.target
+
+    if target == "random" or target is None:
+        wallpapers = []
+        if WALLPAPER_DIR.is_dir():
+            for ext in ("*.png", "*.jpg", "*.jpeg", "*.webp", "*.svg"):
+                wallpapers.extend(glob.glob(str(WALLPAPER_DIR / ext)))
+        
+        if not wallpapers:
+            log_error(f"No wallpapers found in {WALLPAPER_DIR}")
+            sys.exit(1)
+        
+        chosen = random.choice(wallpapers)
+        set_wallpaper(chosen)
+    else:
+        set_wallpaper(target)
+
+def cmd_scheme(args):
+    """Handle 'kaze-cli scheme' command."""
+    if not WALLPAPER_CACHE.is_file():
+        log_error("No cached wallpaper found. Set a wallpaper first with: kaze-cli wallpaper <path>")
+        sys.exit(1)
+
+    with open(WALLPAPER_CACHE, "r") as f:
+        current_wallpaper = f.read().strip()
+
+    scheme_map = {
+        "tonal-spot": "scheme-tonal-spot",
+        "vibrant": "scheme-vibrant",
+        "expressive": "scheme-expressive",
+        "neutral": "scheme-neutral"
+    }
+
+    selected_scheme = scheme_map.get(args.scheme, "scheme-tonal-spot")
+    log_info(f"Switching color mood to: {args.scheme}")
+    apply_matugen_and_reloads(current_wallpaper, selected_scheme)
+
+# ------------------------------------------------------------------------------
+# Dotfile Sync & Safe Backup
+# ------------------------------------------------------------------------------
+def cmd_sync(args):
+    """Safely synchronize user configs with official distribution defaults."""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    backup_dir = CONFIG_DIR / f"kaze-backup-{timestamp}"
+
+    targets = ["hypr", "quickshell", "matugen", "ghostty"]
+    log_info(f"Creating timestamped backup at: {backup_dir}")
+    backup_dir.mkdir(parents=True, exist_ok=True)
+
+    for target in targets:
+        src = CONFIG_DIR / target
+        if src.exists():
+            dest = backup_dir / target
+            if src.is_dir():
+                shutil.copytree(src, dest)
+            else:
+                shutil.copy2(src, dest)
+            log_info(f"  Backed up {target} -> {dest}")
+
+    log_success("Backup completed.")
+
+    # Check for distro skel configs to restore / sync
+    skel_config = Path("/etc/skel/.config")
+    if not skel_config.is_dir():
+        log_warn("Distribution default templates (/etc/skel/.config) not found on system.")
+        return
+
+    if not args.non_interactive:
+        answer = input(f"{YELLOW}{BOLD}Proceed with updating ~/.config from system defaults? (y/N): {RESET}").strip().lower()
+        if answer != 'y':
+            log_info("Synchronization cancelled by user.")
+            return
+
+    for target in targets:
+        source_dir = skel_config / target
+        user_dest = CONFIG_DIR / target
+        if source_dir.is_dir():
+            shutil.copytree(source_dir, user_dest, dirs_exist_ok=True)
+            log_info(f"  Synchronized: {target}")
+
+    log_success("Kaze configurations updated successfully.")
+
+# ------------------------------------------------------------------------------
+# System Doctor & Pre-flight Diagnostics
+# ------------------------------------------------------------------------------
+def cmd_doctor(args):
+    """Run comprehensive system health and diagnostic tests."""
+    print(f"\n{CYAN}{BOLD}=== Kaze OS System Health & Diagnostic Doctor ==={RESET}\n")
+
+    def check_status(label, condition, details=""):
+        status = f"{GREEN}[OK]{RESET}" if condition else f"{RED}[FAIL]{RESET}"
+        detail_str = f" ({details})" if details else ""
+        print(f"  {status} {BOLD}{label}{RESET}{detail_str}")
+        return condition
+
+    # 1. Desktop & Compositor
+    hypr_sig = os.environ.get("HYPRLAND_INSTANCE_SIGNATURE")
+    hypr_ver = run_cmd(["hyprctl", "version"], capture=True) if hypr_sig else None
+    check_status("Hyprland Compositor", bool(hypr_sig), "Active" if hypr_sig else "Inactive or not in Hyprland")
+
+    # 2. Daemons
+    awww_pid = run_cmd(["pidof", "awww-daemon"], capture=True)
+    check_status("awww Wallpaper Daemon", bool(awww_pid), f"PID: {awww_pid}" if awww_pid else "Not running")
+
+    qs_pid = run_cmd(["pidof", "quickshell"], capture=True)
+    check_status("QuickShell Desktop Shell", bool(qs_pid), f"PID: {qs_pid}" if qs_pid else "Not running")
+
+    # 3. Audio & Connectivity
+    pw_pid = run_cmd(["pidof", "pipewire"], capture=True)
+    check_status("PipeWire Audio Server", bool(pw_pid), "Running" if pw_pid else "Not running")
+
+    wp_pid = run_cmd(["pidof", "wireplumber"], capture=True)
+    check_status("WirePlumber Session Manager", bool(wp_pid), "Running" if wp_pid else "Not running")
+
+    # 4. Hardware & GPU
+    has_vulkan = bool(shutil.which("vulkaninfo"))
+    check_status("Vulkan Graphics Stack", has_vulkan, "vulkaninfo available" if has_vulkan else "vulkaninfo missing")
+
+    # 5. Storage & Snapper
+    is_btrfs = run_cmd(["findmnt", "-n", "-o", "FSTYPE", "/"], capture=True) == "btrfs"
+    check_status("Root Filesystem (Btrfs)", is_btrfs, "Btrfs detected on /" if is_btrfs else "Not Btrfs")
+
+    if is_btrfs and shutil.which("snapper"):
+        snaps = run_cmd(["snapper", "-c", "root", "list"], capture=True)
+        count = len(snaps.splitlines()) - 2 if snaps else 0
+        check_status("Snapper Root Protection", count >= 0, f"{max(0, count)} snapshots found")
+
+    print(f"\n{GREEN}{BOLD}Diagnostics completed.{RESET}\n")
+
+# ------------------------------------------------------------------------------
+# Main Entry Point
+# ------------------------------------------------------------------------------
+def main():
+    parser = argparse.ArgumentParser(
+        prog="kaze-cli",
+        description="Kaze OS Unified Management Utility (風)"
+    )
+    subparsers = parser.add_subparsers(dest="subcommand", required=True)
+
+    # Wallpaper
+    p_wall = subparsers.add_parser("wallpaper", help="Set wallpaper and trigger dynamic theming")
+    p_wall.add_argument("target", nargs="?", default="random", help="Path to image or 'random'")
+    p_wall.set_defaults(func=cmd_wallpaper)
+
+    # Scheme
+    p_scheme = subparsers.add_parser("scheme", help="Change dynamic Material You color scheme tone")
+    p_scheme.add_argument("scheme", choices=["tonal-spot", "vibrant", "expressive", "neutral"], help="Color mood")
+    p_scheme.set_defaults(func=cmd_scheme)
+
+    # Sync
+    p_sync = subparsers.add_parser("sync", help="Synchronize user configs with distro updates")
+    p_sync.add_argument("-y", "--yes", dest="non_interactive", action="store_true", help="Non-interactive mode")
+    p_sync.set_defaults(func=cmd_sync)
+
+    # Doctor
+    p_doc = subparsers.add_parser("doctor", help="Run system diagnostics and verify services")
+    p_doc.set_defaults(func=cmd_doctor)
+
+    args = parser.parse_args()
+    args.func(args)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,24 @@
+# ==============================================================================
+# KAZE NAGOMI: CALAMARES NETINSTALL DESKTOP SELECTOR (flavors/nagomi/calamares/modules/netinstall.yaml)
+# ==============================================================================
+
+- name: "Desktop Selection"
+  description: "Select your preferred desktop environment"
+  critical: true
+  expanded: true
+  items:
+    - name: "KDE Plasma 6 (Daily Driver Workstation)"
+      description: "Modern Wayland desktop with fractional scaling and Discover Flathub store (Default)"
+      selected: true
+      packages:
+        - plasma-meta
+        - plasma-wayland-session
+        - kde-applications-meta
+        - sddm
+    - name: "GNOME 46 (Alternative)"
+      description: "Gesture-centric modern Wayland workstation"
+      selected: false
+      packages:
+        - gnome
+        - gnome-extra
+        - gdm

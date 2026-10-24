@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""
+Kaze OS First-Boot Welcome Wizard (kaze-welcome)
+Provides automated mirror ranking, GPU driver assistance, software bundles,
+and Btrfs Snapper status confirmation on first login.
+"""
+
+import sys
+import os
+import shutil
+import subprocess
+from pathlib import Path
+
+# ANSI Styling for CLI fallback
+BOLD = "\033[1m"
+GREEN = "\033[0;32m"
+CYAN = "\033[0;36m"
+YELLOW = "\033[1;33m"
+RED = "\033[0;31m"
+RESET = "\033[0m"
+
+FIRST_RUN_FLAG = Path.home() / ".config" / "kaze-welcome.done"
+
+def run_cmd(cmd, check=False):
+    try:
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=check)
+        return res.stdout.strip()
+    except Exception:
+        return ""
+
+def check_gpu():
+    """Detect discrete and integrated GPU hardware."""
+    lspci = run_cmd(["lspci"])
+    gpus = []
+    if "NVIDIA" in lspci:
+        gpus.append("NVIDIA Discrete GPU detected")
+    if "AMD" in lspci or "Radeon" in lspci:
+        gpus.append("AMD Radeon Graphics detected")
+    if "Intel" in lspci:
+        gpus.append("Intel Graphics detected")
+    return gpus or ["Standard Display Adapter"]
+
+def check_snapshots():
+    """Verify Btrfs Snapper status."""
+    is_btrfs = run_cmd(["findmnt", "-n", "-o", "FSTYPE", "/"]) == "btrfs"
+    if not is_btrfs:
+        return False, "Not running on Btrfs"
+    if shutil.which("snapper"):
+        res = run_cmd(["snapper", "-c", "root", "list"])
+        count = len(res.splitlines()) - 2 if res else 0
+        return True, f"Active ({max(0, count)} snapshots stored)"
+    return False, "Snapper tool not installed"
+
+def launch_cli_welcome():
+    """CLI / Terminal version of the Welcome Wizard."""
+    print(f"\n{CYAN}{BOLD}===================================================={RESET}")
+    print(f"{CYAN}{BOLD}         Welcome to Kaze OS (風)                    {RESET}")
+    print(f"{CYAN}{BOLD}===================================================={RESET}\n")
+
+    print(f"{BOLD}1. Hardware Diagnostics:{RESET}")
+    for gpu in check_gpu():
+        print(f"   - {gpu}")
+
+    snap_active, snap_msg = check_snapshots()
+    snap_status = f"{GREEN}[ACTIVE]{RESET}" if snap_active else f"{YELLOW}[INACTIVE]{RESET}"
+    print(f"\n{BOLD}2. System Snapshot Protection:{RESET} {snap_status} - {snap_msg}")
+
+    print(f"\n{BOLD}3. Quick Setup Tasks:{RESET}")
+    print("   [1] Optimize Pacman download mirrors (via reflector)")
+    print("   [2] Verify GPU driver packages")
+    print("   [3] Exit wizard")
+
+    choice = input(f"\n{YELLOW}Select an option [1-3] (Default: 3): {RESET}").strip()
+
+    if choice == "1":
+        print(f"\n{BLUE}[*] Ranking fastest Arch Linux mirrors with reflector...{RESET}")
+        if shutil.which("reflector"):
+            subprocess.run(["sudo", "reflector", "--latest", "10", "--protocol", "https", "--sort", "rate", "--save", "/etc/pacman.d/mirrorlist"])
+            print(f"{GREEN}[✓] Mirrorlist updated successfully.{RESET}")
+        else:
+            print(f"{RED}[!] reflector package not found.{RESET}")
+    elif choice == "2":
+        print(f"\n{BLUE}[*] Checking driver recommendations...{RESET}")
+        lspci = run_cmd(["lspci"])
+        if "NVIDIA" in lspci:
+            print(f"{YELLOW}-> Detected NVIDIA GPU. Recommended packages: nvidia, nvidia-utils, lib32-nvidia-utils{RESET}")
+        elif "AMD" in lspci or "Radeon" in lspci:
+            print(f"{GREEN}-> Detected AMD GPU. Fully supported out of the box with Mesa & Vulkan-Radeon.{RESET}")
+        else:
+            print(f"{GREEN}-> Intel / standard display stack fully initialized.{RESET}")
+
+    FIRST_RUN_FLAG.parent.mkdir(parents=True, exist_ok=True)
+    FIRST_RUN_FLAG.touch()
+    print(f"\n{GREEN}Welcome setup completed. Enjoy Kaze OS!{RESET}\n")
+
+def main():
+    launch_cli_welcome()
+
+if __name__ == "__main__":
+    main()

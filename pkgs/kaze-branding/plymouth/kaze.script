@@ -1,0 +1,27 @@
+# Plymouth Script for Kaze OS Boot Animation
+
+screen.w = Window.GetWidth();
+screen.h = Window.GetHeight();
+
+logo.image = Image("logo.png");
+if (!logo.image) {
+    logo.image = Image("kaze-logo.png");
+}
+
+if (logo.image) {
+    logo.sprite = Sprite(logo.image);
+    logo.x = screen.w / 2 - logo.image.GetWidth() / 2;
+    logo.y = screen.h / 2 - logo.image.GetHeight() / 2;
+    logo.sprite.SetPosition(logo.x, logo.y, 10);
+    logo.sprite.SetOpacity(0.9);
+}
+
+progress = 0;
+fun refresh_callback() {
+    progress += 0.02;
+    if (logo.sprite) {
+        opacity = 0.75 + 0.25 * Math.Sin(progress * 4);
+        logo.sprite.SetOpacity(opacity);
+    }
+}
+Plymouth.SetRefreshFunction(refresh_callback);

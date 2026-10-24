@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Kaze Welcome
+GenericName=First-Boot Setup Assistant
+Comment=First-boot setup and hardware optimization assistant for Kaze OS
+Exec=/usr/bin/kaze-welcome
+Icon=kaze-logo
+Terminal=true
+StartupNotify=true
+Categories=Qt;System;Settings;
+X-GNOME-Autostart-enabled=true

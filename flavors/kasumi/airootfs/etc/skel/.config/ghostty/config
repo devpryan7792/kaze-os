@@ -1,0 +1,21 @@
+# ==============================================================================
+# KAZE KASUMI: GHOSTTY GPU TERMINAL CONFIGURATION (ghostty/config)
+# ==============================================================================
+
+font-family = "JetBrainsMono Nerd Font"
+font-size = 13
+font-feature = ["+liga", "+calt"]
+
+window-padding-x = 12
+window-padding-y = 12
+window-decoration = false
+
+background-opacity = 0.92
+background-blur-radius = 20
+
+cursor-style = bar
+cursor-style-blink = true
+mouse-hide-while-typing = true
+
+# Dynamic Theme Inclusion (Live reloaded by Matugen)
+config-file = ~/.config/ghostty/theme

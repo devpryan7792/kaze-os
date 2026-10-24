@@ -1,0 +1,85 @@
+# ==============================================================================
+# KAZE OS: UNIVERSAL COMMON PACKAGES (core/packages.common)
+# Shared foundation installed across all three flavors (Hayate, Kasumi, Nagomi)
+# ==============================================================================
+
+# Base Operating System & Bootloader
+base
+base-devel
+linux
+linux-headers
+linux-firmware
+intel-ucode
+amd-ucode
+mkinitcpio
+mkinitcpio-archiso
+grub
+efibootmgr
+syslinux
+edk2-shell
+memtest86+
+memtest86+-efi
+mtools
+btrfs-progs
+e2fsprogs
+dosfstools
+xfsprogs
+squashfs-tools
+parted
+gptfdisk
+arch-install-scripts
+
+# Automated Snapshot & Recovery Engine
+snapper
+snap-pac
+grub-btrfs
+
+# Hardware Support & Drivers
+mesa
+vulkan-icd-loader
+pciutils
+usbutils
+smartmontools
+dkms
+kbd
+xkeyboard-config
+modemmanager
+qemu-guest-agent
+virtualbox-guest-utils-nox
+open-vm-tools
+hyperv
+
+# Networking Stack
+networkmanager
+iptables
+iwd
+wireless_tools
+wpa_supplicant
+curl
+wget
+rsync
+git
+openssh
+reflector
+
+# Audio & Multimedia Stack
+pipewire
+pipewire-pulse
+pipewire-alsa
+pipewire-jack
+wireplumber
+
+# System Administration, Shell & Utilities
+sudo
+neovim
+nano
+which
+zsh
+bash-completion
+polkit
+haveged
+
+# Display Server & Installer Engine Foundation
+xorg-server
+xorg-xinit
+cachyos-calamares

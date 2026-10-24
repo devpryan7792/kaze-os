@@ -1,0 +1,12 @@
+# ==============================================================================
+# KAZE OS: GRUB-BTRFS CONFIGURATION (/etc/default/grub-btrfs/config)
+# ==============================================================================
+
+# Title for the GRUB snapshot submenu
+GRUB_BTRFS_SUBMENUNAME="Kaze OS Snapshots"
+
+# Limit the number of snapshots shown in the GRUB menu
+GRUB_BTRFS_LIMIT="15"
+
+# Show snapshot descriptions
+GRUB_BTRFS_SHOW_TOTAL_SNAPSHOTS="true"

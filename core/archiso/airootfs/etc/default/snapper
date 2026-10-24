@@ -1,0 +1,2 @@
+# Which configurations to service with systemd timers
+SNAPPER_CONFIGS="root"

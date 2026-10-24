@@ -1,0 +1,12 @@
+root:x:0:root
+adm:x:4:kaze
+wheel:x:998:kaze
+uucp:x:987:kaze
+audio:x:995:kaze
+video:x:986:kaze
+optical:x:990:kaze
+storage:x:988:kaze
+input:x:984:kaze
+users:x:985:kaze
+autologin:x:960:kaze
+kaze:x:1000:kaze

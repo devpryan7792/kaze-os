@@ -1,0 +1,6 @@
+singleton Theme 1.0 Theme.qml
+Bar 1.0 Bar.qml
+Dashboard 1.0 Dashboard.qml
+Launcher 1.0 Launcher.qml
+NotificationPopup 1.0 NotificationPopup.qml
+WallpaperPicker 1.0 WallpaperPicker.qml

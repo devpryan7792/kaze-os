@@ -1,0 +1,45 @@
+# Maintainer: devpryan7792 <devpryan7792@kaze-os.org>
+pkgname=quickshell-git
+_pkgname=quickshell
+pkgver=r724.819bb2c
+pkgrel=1
+pkgdesc="Flexible QtQuick / QML desktop shell for Wayland compositors"
+arch=('x86_64')
+url="https://git.outfoxxed.me/outfoxxed/quickshell"
+license=('GPL-3.0-or-later')
+depends=(
+    'qt6-base'
+    'qt6-declarative'
+    'qt6-wayland'
+    'wayland'
+    'jemalloc'
+    'libglvnd'
+)
+makedepends=(
+    'git'
+    'cmake'
+    'ninja'
+    'wayland-protocols'
+    'pkgconf'
+)
+provides=('quickshell')
+conflicts=('quickshell')
+source=("git+https://git.outfoxxed.me/outfoxxed/quickshell.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "${_pkgname}"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+build() {
+    cmake -B build -S "${_pkgname}" \
+        -G Ninja \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr
+    cmake --build build
+}
+
+package() {
+    DESTDIR="${pkgdir}" cmake --install build
+}

@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# KAZE OS: LIVE USER & ENVIRONMENT INITIALIZER (/usr/local/bin/kaze-live-init)
+# Prepares /home/kaze, sets permissions, and detects virtualization flags
+# ==============================================================================
+
+set -e
+
+LIVE_USER="kaze"
+LIVE_UID=1000
+LIVE_GID=1000
+LIVE_HOME="/home/${LIVE_USER}"
+
+echo "==> Initializing Kaze OS Live Environment..."
+
+# 1. Ensure user and groups exist
+if ! id -u "$LIVE_USER" &>/dev/null; then
+    useradd -m -u "$LIVE_UID" -g "$LIVE_GID" -G wheel,video,audio,input,storage,optical,network,power -s /usr/bin/zsh "$LIVE_USER"
+else
+    # Ensure supplementary groups
+    usermod -a -G wheel,video,audio,input,storage,optical,network,power "$LIVE_USER" 2>/dev/null || true
+fi
+
+# Ensure passwordless sudo
+passwd -d "$LIVE_USER" 2>/dev/null || true
+
+# 2. Populate /home/kaze from /etc/skel if empty or missing
+mkdir -p "$LIVE_HOME"
+if [ -d /etc/skel ]; then
+    cp -aT /etc/skel "$LIVE_HOME"
+fi
+
+# 3. Create .zshrc if missing to guarantee zsh-newuser-install is NEVER triggered
+touch "$LIVE_HOME/.zshrc"
+echo "# Kaze OS Default zsh profile" >> "$LIVE_HOME/.zshrc"
+
+# Ensure user owns their home directory completely
+chown -R "${LIVE_UID}:${LIVE_GID}" "$LIVE_HOME"
+chmod 700 "$LIVE_HOME"
+
+# 4. Virtualization & GPU Detection
+# If running under QEMU, KVM, VirtualBox, VMware, configure Wayland fallback env
+VIRT_TYPE=$(systemd-detect-virt 2>/dev/null || true)
+mkdir -p /etc/environment.d
+
+cat << 'EOF' > /etc/environment.d/10-kaze-wayland.conf
+# Kaze OS Universal Wayland Environment Defaults
+XDG_CURRENT_DESKTOP=Hyprland
+XDG_SESSION_TYPE=wayland
+XDG_SESSION_DESKTOP=Hyprland
+QT_QPA_PLATFORM=wayland;xcb
+GDK_BACKEND=wayland,x11,*
+SDL_VIDEODRIVER=wayland
+CLUTTER_BACKEND=wayland
+EOF
+
+if [[ -n "$VIRT_TYPE" && "$VIRT_TYPE" != "none" ]]; then
+    echo "==> Virtualized hypervisor detected: $VIRT_TYPE"
+    cat << 'EOF' >> /etc/environment.d/10-kaze-wayland.conf
+# Virtualization compatibility overrides
+WLR_NO_HARDWARE_CURSORS=1
+WLR_RENDERER_ALLOW_SOFTWARE=1
+AQ_NO_MODIFIERS=1
+EOF
+    # If no 3D hardware render node exists, force software rendering
+    if [ ! -e /dev/dri/renderD128 ]; then
+        echo "LIBGL_ALWAYS_SOFTWARE=1" >> /etc/environment.d/10-kaze-wayland.conf
+    fi
+fi
+
+echo "==> Kaze OS Live Environment initialization completed successfully."

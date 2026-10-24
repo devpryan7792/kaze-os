@@ -1,0 +1,45 @@
+name: Build Packages & Update Repository
+
+on:
+  push:
+    paths:
+      - 'pkgs/**'
+      - 'repo/**'
+      - '.github/workflows/build-packages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-packages:
+    name: Compile PKGBUILDs in Arch Container
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+      options: --privileged
+
+    steps:
+      - name: Checkout Monorepo
+        uses: actions/checkout@v4
+
+      - name: Update Pacman & Install Toolchain
+        run: |
+          pacman -Syu --noconfirm git rsync sudo pacman-contrib
+
+      - name: Setup Non-Root Build User
+        run: |
+          useradd -m -G wheel builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+          chown -R builder:builder "$GITHUB_WORKSPACE"
+
+      - name: Compile PKGBUILDs & Index Database
+        run: |
+          su builder -c "./repo/update-repo.sh --all"
+
+      - name: Upload Package Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaze-repo-x86_64
+          path: repo/x86_64/
+          retention-days: 14
