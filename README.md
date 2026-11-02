@@ -12,10 +12,14 @@ engineered from a single modular build engine.
 [![CI · ISO Build](https://github.com/devpryan7792/kaze-os/actions/workflows/build-iso.yml/badge.svg)](https://github.com/devpryan7792/kaze-os/actions/workflows/build-iso.yml)
 [![CI · Packages](https://github.com/devpryan7792/kaze-os/actions/workflows/build-packages.yml/badge.svg)](https://github.com/devpryan7792/kaze-os/actions/workflows/build-packages.yml)
 [![Base](https://img.shields.io/badge/base-Arch_Linux-blue?logo=archlinux&logoColor=white)](https://archlinux.org)
+[![Interactive Portal](https://img.shields.io/badge/interactive-portal-38bdf8?style=flat-square&logo=safari&logoColor=white)](https://devpryan7792.github.io/kaze-os/)
 [![Platform](https://img.shields.io/badge/platform-x86__64-informational)](./build.sh)
 [![License: MIT](https://img.shields.io/badge/license-MIT-orange)](./LICENSE)
 
 </div>
+
+> [!NOTE]
+> **Phase 1 Research & Architecture Prototype**: The core build engine, Btrfs subvolume layout, and flavor overlays are implemented in code. Production ISO compilation and automated package mirrors are undergoing active refining. Explore the live interactive architecture at **[devpryan7792.github.io/kaze-os](https://devpryan7792.github.io/kaze-os/)**.
 
 ---
 

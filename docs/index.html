@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaze OS (風) — Modular Multi-Flavor Arch Linux Engine</title>
+  
+  <meta name="description" content="An ecosystem of three hyper-focused Arch Linux distributions (Hayate, Kasumi, Nagomi) engineered from a single modular build engine with unbreakable Btrfs rollbacks.">
+  <meta name="keywords" content="Arch Linux, Hyprland, Wayland, CachyOS, Btrfs, Snapper, QuickShell, Matugen, Linux Distro">
+  <meta name="author" content="devpryan7792">
+  <meta property="og:title" content="Kaze OS (風) — Modular Multi-Flavor Arch Linux Engine">
+  <meta property="og:description" content="Motion, Flow, Power. Three hyper-focused Arch distributions sharing one unbreakable foundation.">
+  <meta property="og:type" content="website">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Ambient background glow & grid -->
+  <div class="bg-grid"></div>
+  <div class="bg-ambient"></div>
+
+  <!-- Global Advisory Banner -->
+  <div class="advisory-banner">
+    <div class="container advisory-content">
+      <div>
+        <span class="advisory-badge">PHASE 1 STATUS</span>
+        <span>
+          <strong>Research & Architecture Prototype:</strong> The build engine, Btrfs subvolume layout, and flavor overlays are implemented in code. Production ISO compilation and automated package mirrors are undergoing active refining.
+        </span>
+      </div>
+      <a href="https://github.com/devpryan7792/kaze-os" class="btn-github" target="_blank" rel="noopener">
+        View Codebase ↗
+      </a>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand">
+        <span class="brand-kanji">風</span>
+        <span class="brand-text">KAZE OS</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#flavors">Three Flavors</a></li>
+        <li><a href="#btrfs">Btrfs Rollback</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#quickstart">Quickstart</a></li>
+      </ul>
+
+      <div class="nav-badges">
+        <div class="phase-pill">
+          <span class="phase-pulse"></span>
+          <span>PHASE 1 (ACTIVE LAB)</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-subtitle">風 · Motion, Flow, Power</div>
+      <h1 class="hero-title">
+        Three Distinct Operating Systems.<br>
+        <span class="hero-gradient">One Unbreakable Foundation.</span>
+      </h1>
+      <p class="hero-desc">
+        No single OS can maximize competitive gaming, pure Wayland desktop ricing, and friction-free daily productivity without compromise. Kaze OS decouples them into three hyper-tuned overlays sharing an immutable Btrfs core.
+      </p>
+      <div class="hero-cta">
+        <a href="#flavors" class="btn-primary">Explore The 3 Flavors</a>
+        <a href="https://github.com/devpryan7792/kaze-os" class="btn-secondary" target="_blank" rel="noopener">GitHub Monorepo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Flavors Section -->
+  <section id="flavors" class="flavors-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Interactive Flavor Matrix</div>
+        <h2 class="section-title">Pick Your Environment</h2>
+      </div>
+
+      <!-- Flavor Tabs -->
+      <div class="flavor-nav">
+        <button class="flavor-tab active" data-flavor="kasumi">
+          <span>🎨</span> 霞 Kasumi (Aesthetic Rice)
+        </button>
+        <button class="flavor-tab" data-flavor="hayate">
+          <span>⚡</span> 疾風 Hayate (Gaming & Compute)
+        </button>
+        <button class="flavor-tab" data-flavor="nagomi">
+          <span>🛡️</span> 和 Nagomi (Daily Workstation)
+        </button>
+      </div>
+
+      <!-- Active Flavor Detail Card -->
+      <div class="flavor-panel">
+        <div class="flavor-info">
+          <h3 id="flavor-name">霞 KASUMI</h3>
+          <p id="flavor-tagline" class="flavor-tagline">Mist · Aesthetic Wayland Rice & Dynamic Design</p>
+
+          <div class="flavor-spec-grid">
+            <div class="spec-item">
+              <div class="spec-label">Desktop Environment</div>
+              <div id="spec-desktop" class="spec-val">Hyprland (Modular Lua) + QuickShell (QML)</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Kernel & Optimization</div>
+              <div id="spec-kernel" class="spec-val">Standard Linux Kernel (Clean upstream)</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Frame & Latency Profile</div>
+              <div id="spec-latency" class="spec-val">144 Hz wallpaper transitions via awww</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Dynamic Theming</div>
+              <div id="spec-theming" class="spec-val">Matugen Material You tokens from wallpaper</div>
+            </div>
+          </div>
+
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Designed for Wayland purists and designers. Ships a two-tier rice architecture: Tier 1 is rock-solid official Arch packages; Tier 2 injects hardware-accelerated QuickShell and live wallpaper color palettes.
+          </p>
+        </div>
+
+        <!-- Terminal Preview -->
+        <div class="flavor-terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <div class="dot dot-red"></div>
+              <div class="dot dot-yellow"></div>
+              <div class="dot dot-green"></div>
+            </div>
+            <div class="terminal-title">build-engine.sh — phase 1 assembly</div>
+          </div>
+          <div id="flavor-term-body" class="terminal-body">
+            <div><span class="term-comment"># Kasumi Phase 1 Profile Assembly</span></div>
+            <div><span class="term-cyan">$</span> ./build.sh -f kasumi</div>
+            <div><span class="term-green">[1/5]</span> Merging core/packages.common + flavors/kasumi/packages.flavor</div>
+            <div><span class="term-green">[2/5]</span> Layering flavors/kasumi/airootfs overlay</div>
+            <div><span class="term-green">[3/5]</span> Generating modular Lua bindings in /etc/skel/.config/hypr/</div>
+            <div><span class="term-green">[4/5]</span> Linking QuickShell QML desktop bar & dynamic colors.json</div>
+            <div><span class="term-cyan">[5/5]</span> Built profile: out/kaze-kasumi-archiso.profile</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Btrfs Rollback Section -->
+  <section id="btrfs" class="btrfs-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">System Reliability Invariant</div>
+        <h2 class="section-title">The 5-Subvolume Btrfs Shield</h2>
+        <p style="color: var(--text-muted); max-width: 650px; margin: 0.5rem auto 0;">
+          Rolling distros often fear broken updates. Kaze isolates user data and system state so rollbacks take 30 seconds from the boot menu without touching your files.
+        </p>
+      </div>
+
+      <div class="btrfs-grid">
+        <div id="subvol-root" class="subvolume-card">
+          <div class="subvol-name">@</div>
+          <div class="subvol-mount">Mount: /</div>
+          <span class="subvol-badge badge-revert">Snapshotted & Reverted</span>
+        </div>
+        <div id="subvol-home" class="subvolume-card">
+          <div class="subvol-name">@home</div>
+          <div class="subvol-mount">Mount: /home</div>
+          <span class="subvol-badge badge-safe">Never Touched</span>
+        </div>
+        <div class="subvolume-card">
+          <div class="subvol-name">@snapshots</div>
+          <div class="subvol-mount">Mount: /.snapshots</div>
+          <span class="subvol-badge badge-safe">Snapper Metadata</span>
+        </div>
+        <div class="subvolume-card">
+          <div class="subvol-name">@var_log</div>
+          <div class="subvol-mount">Mount: /var/log</div>
+          <span class="subvol-badge badge-safe">Journal Preserved</span>
+        </div>
+        <div class="subvolume-card">
+          <div class="subvol-name">@var_cache</div>
+          <div class="subvol-mount">Mount: /var/cache</div>
+          <span class="subvol-badge badge-safe">Pacman Cache Intact</span>
+        </div>
+      </div>
+
+      <!-- Simulator Box -->
+      <div class="rollback-sim">
+        <div class="rollback-info">
+          <h4>Interactive Rollback Simulator</h4>
+          <p id="rollback-status">
+            Click the button to simulate a botched driver or kernel update, then watch the subvolume recovery in action.
+          </p>
+        </div>
+        <button id="btn-sim-rollback" class="btn-rollback">Simulate Broken Update</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quickstart Section -->
+  <section id="quickstart" class="quickstart-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Developer Engine</div>
+        <h2 class="section-title">Assembling the Profile (Phase 1)</h2>
+      </div>
+
+      <div class="cmd-box">
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('git clone https://github.com/devpryan7792/kaze-os.git\ncd kaze-os\nsudo ./build.sh -f kasumi -a')">Copy</button>
+        <div><span class="term-comment"># 1. Clone the monorepo</span></div>
+        <div><span class="term-cyan">$</span> git clone https://github.com/devpryan7792/kaze-os.git && cd kaze-os</div>
+        <br>
+        <div><span class="term-comment"># 2. Assemble profile for validation (dry-run merge without full ISO write)</span></div>
+        <div><span class="term-cyan">$</span> sudo ./build.sh -f kasumi -a</div>
+        <br>
+        <div><span class="term-comment"># 3. Launch QEMU test harness with UEFI & virtio GPU</span></div>
+        <div><span class="term-cyan">$</span> ./launch.sh -f kasumi</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>
+        <strong>Kaze OS (風)</strong> — Engineered by <a href="https://github.com/devpryan7792">@devpryan7792</a>.
+      </p>
+      <p style="margin-top: 0.5rem; color: var(--text-dim);">
+        Phase 1 Architecture Prototype · Arch Linux & Archiso Ecosystem · Released under MIT License
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
